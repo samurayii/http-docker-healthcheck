@@ -1,3 +1,3 @@
-# Template app.
+# HTTP Docker healthcheck
 
-template. [Документация](docs/README.md)
+[Документация](docs/README.md)
