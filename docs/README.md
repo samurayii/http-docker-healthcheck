@@ -31,6 +31,8 @@ Http проверка здоровья сервисов для docker.
 - **logger** - настрока логгера (переменная среды: HTTP_DOCKER_HEALTHCHECK_LOGGER)
 - **authorization** - настрока авторизации (переменная среды: HTTP_DOCKER_HEALTHCHECK_AUTHORIZATION)
 - **api** - настройка API (переменная среды: HTTP_DOCKER_HEALTHCHECK_API)
+- **web** - настройка статического Web сервера (переменная среды: HTTP_DOCKER_HEALTHCHECK_WEB)
+- **web.static** - настройка статического сервера (пакет: https://github.com/koajs/static) (переменная среды: HTTP_DOCKER_HEALTHCHECK_WEB_STATIC)
 - **docker_healthcheck** - настрока провеки здоровья для контейнера (переменная среды: HTTP_DOCKER_HEALTHCHECK_DOCKER_HEALTHCHECK)
 
 ### Пример файла конфигурации config.toml
@@ -60,6 +62,26 @@ Http проверка здоровья сервисов для docker.
     ips_count = 0                       # максимальное количество IP прочитанное из заголовка прокси, по умолчанию 0 (означает бесконечность)
     env = "development"                 # среда для сервера koa
     #keys = []                          # массив подписанных ключей cookie
+
+[web]                                   # настройка WEB сервера
+    enable = false                      # активация WEB сервера
+    auth = false                        # активация авторизации
+    listening = "*:3000"                # настройка слушателя
+    prefix = ""                         # префикс
+    proxy = false                       # когда поле заголовка true proxy будут доверенным
+    subdomain_offset = 2                # смещение от поддомена для игнорирования
+    proxy_header = "X-Forwarded-For"    # заголовок IP прокси
+    ips_count = 0                       # максимальное количество IP прочитанное из заголовка прокси, по умолчанию 0 (означает бесконечность)
+    env = "development"                 # среда для сервера koa
+    #keys = []                          # массив подписанных ключей cookie
+    [web.static]                        # настройка статического сервера (пакет: https://github.com/koajs/static)
+        folder = "static"               # папка со статическими файлами
+        maxage = 0                      # время жизни кеша в миллисекундах
+        hidden = false                  # разрешение отдавать скрытые файлы
+        index = "index.html"            # название файла индекса
+        defer = false                   # позволить активировать нижестоящие промежуточное по первым
+        gzip = true                     # gzip сжатие
+        brotli = true                   # автоматическое обслуживание файла brotli
 
 [docker_healthcheck]    # настрока провеки здоровя для контейнера (утилита docker-healthcheck)
     enable = false      # активация
@@ -105,5 +127,22 @@ Http проверка здоровья сервисов для docker.
 | api.ips_count | число | 0 | максимальное количество IP прочитанное из заголовка прокси, по умолчанию 0 (означает бесконечность) |
 | api.env | строка | development | среда для сервера [koa](https://www.npmjs.com/package/koa) |
 | api.keys | строка[] |  | массив подписанных ключей cookie |
+| web.enable | логический | false | активация API (true или false) |
+| web.auth | логический | false | активация авторизации (true или false) |
+| web.listening | строка | *:3001 | настройка слушателя, формат <хост>:<порт> |
+| web.prefix | строка |  | префикс |
+| web.proxy | логический | false | когда поле заголовка true proxy будут доверенным |
+| web.subdomain_offset | число | 2 | смещение от поддомена для игнорирования |
+| web.proxy_header | строка | X-Forwarded-For | заголовок IP прокси |
+| web.ips_count | число | 0 | максимальное количество IP прочитанное из заголовка прокси, по умолчанию 0 (означает бесконечность) |
+| web.env | строка | development | среда для сервера [koa](https://www.npmjs.com/package/koa) |
+| web.keys | строка[] |  | массив подписанных ключей cookie |
+| web.static.folder | строка | static | папка со статическими файлами |
+| web.static.maxage | число |  | время жизни кеша в миллисекундах |
+| web.static.hidden | логический | false | разрешение отдавать скрытые файлы |
+| web.static.index | строка | index.html | название файла индекса |
+| web.static.defer | логический | false | позволить активировать нижестоящие промежуточное по первым |
+| web.static.gzip | логический | true | gzip сжатие |
+| web.static.brotli | логический | true | автоматическое обслуживание файла brotli |
 | docke_healthcheck.enable | логический | false | активация |
 | docke_healthcheck.timeout | число | 10 | время ожидания в секундах |
