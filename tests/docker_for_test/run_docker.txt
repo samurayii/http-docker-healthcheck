@@ -1,0 +1,28 @@
+docker build -t test/app:0.1 .
+
+healthcheck.enable=true
+healthcheck.path=/healthcheck
+healthcheck.protocol=http
+healthcheck.method=get | post | head | options | put | patch | delete
+healthcheck.port=80
+healthcheck.host=test-app
+healthcheck.timeout=10
+healthcheck.interval=10
+healthcheck.healthy_after=3
+healthcheck.unhealthy_after=3
+healthcheck.initialization_timeout=10
+healthcheck.policy=recreate  | restart  | none
+healthcheck.policy_trigger=3
+
+healthcheck.tags=tag1,tag2
+
+healthcheck.header.header1=header1-val
+
+docker run --rm -it --name test-app1 --hostname test-app1 -l healthcheck.host=test-app1 -l healthcheck.port=6001 -l healthcheck.enable=true -l healthcheck.path=/healthcheck -l healthcheck.tags=tag1,tag2 -l healthcheck.protocol=http -p 6001:6001 test/app:0.1
+docker run --rm -it --name test-app2 --hostname test-app2 -l healthcheck.host=test-app2 -l healthcheck.port=6002 -l healthcheck.enable=true -l healthcheck.path=/healthcheck -l healthcheck.tags=tag1,tag3 -l healthcheck.protocol=http -p 6002:6001 test/app:0.1
+docker run --rm -it --name test-app3 --hostname test-app3 -l healthcheck.host=test-app3 -l healthcheck.port=6003 -l healthcheck.enable=true -l healthcheck.path=/healthcheck -l healthcheck.tags=tag1 -l healthcheck.protocol=http -p 6003:6001 test/app:0.1
+
+docker run --rm -it --name test-app4 --hostname test-app4 -l healthcheck.host=localhost -l healthcheck.port=6004 -l healthcheck.enable=true -l healthcheck.path=/healthcheck -l healthcheck.tags=tag1,tag2 -l healthcheck.protocol=http -p 6004:6001 test/app:0.1
+
+
+docker run --rm -it --name test-app-bad --hostname test-app-bad -l healthcheck.port=dddddd -l healthcheck.enable=true -l healthcheck.path=/healthcheck -l healthcheck.tags=tag1,tag2 -l healthcheck.protocol=http test/app:0.1

@@ -3,6 +3,10 @@ export * from "./middleware/healthcheck";
 export * from "./middleware/security";
 export * from "./middleware/logger";
 export * from "./middleware/authorization";
-export * from "./middleware/body-parser";
+
+export * from "./routers/service";
+export * from "./routers/ui";
+
+export * from "./middleware/static";
 
 export * from "./interfaces";

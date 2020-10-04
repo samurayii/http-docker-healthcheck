@@ -1,9 +1,12 @@
 [logger]
     mode = "prod"
     enable = true
-    timestamp = true
+    timestamp = "none"
     type = true
 
 [api]
     enable = true
     env = "production"
+
+[docker]
+    socket = "/var/run/docker.sock"

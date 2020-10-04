@@ -5,6 +5,7 @@ import { Catalog } from "di-ts-decorators";
 import { IApiServerConfig } from "../interfaces";
 
 @Middleware("api-server")
+@Middleware("web-server")
 export class HttpLogger implements IMiddleware {
 
     constructor (

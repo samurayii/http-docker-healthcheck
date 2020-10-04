@@ -11,3 +11,11 @@
     enable = true
     auth = true
     env = "development"
+
+[web]
+    enable = true
+    [web.static]
+        folder = "src/static"
+
+[docker]
+    tags = ["tag1","tag2"]

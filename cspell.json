@@ -1,8 +1,11 @@
 {
     "version": "0.1",
     "words": [
+        "brotli",
+        "dockerode",
         "healthcheck",
         "jtomler",
+        "maxage",
         "Nuzhnov",
         "samuray"
     ]

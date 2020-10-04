@@ -22,20 +22,39 @@
     ips_count = 0                       # максимальное количество IP прочитанное из заголовка прокси, по умолчанию 0 (означает бесконечность)
     env = "development"                 # среда для сервера koa
     #keys = []                          # массив подписанных ключей cookie
-    [api.parsing]                       # настройка парсинга (пакет: https://github.com/dlau/koa-body#readme)
-        enable = false                  # активация парсинга
-        encoding = "utf-8"              # кодировка парсинга
-        form_limit = "56kb"             # лимит для форм
-        json_limit = "1mb"              # лимит для json
-        text_limit = "1mb"              # лимит для raw
-        text = true                     # парсинг raw
-        json = true                     # парсинг json
-        multipart = false               # парсинг составных частей
-        include_unparsed = false        # добавить исходное тело запроса в переменную ctx.request.body
-        urlencoded = true               # парсинг данных urlencoded
-        json_strict = true              # строгий режим парсинга json
-        methods = ["POST"]              # список методов для парсинга
+
+[web]                                   # настройка WEB сервера
+    enable = false                      # активация WEB сервера
+    auth = false                        # активация авторизации
+    listening = "*:3000"                # настройка слушателя
+    prefix = ""                         # префикс
+    proxy = false                       # когда поле заголовка true proxy будут доверенным
+    subdomain_offset = 2                # смещение от поддомена для игнорирования
+    proxy_header = "X-Forwarded-For"    # заголовок IP прокси
+    ips_count = 0                       # максимальное количество IP прочитанное из заголовка прокси, по умолчанию 0 (означает бесконечность)
+    env = "development"                 # среда для сервера koa
+    #keys = []                          # массив подписанных ключей cookie
+    [web.static]                        # настройка статического сервера (пакет: https://github.com/koajs/static)
+        folder = "static"               # папка со статическими файлами
+        maxage = 0                      # время жизни кеша в миллисекундах
+        hidden = false                  # разрешение отдавать скрытые файлы
+        index = "index.html"            # название файла индекса
+        defer = false                   # позволить активировать нижестоящие промежуточное по первым
+        gzip = true                     # gzip сжатие
+        brotli = true                   # автоматическое обслуживание файла brotli
 
 [docker_healthcheck]    # настрока провеки здоровя для контейнера (утилита docker-healthcheck)
     enable = false      # активация
     timeout = 10        # время ожидания
+
+[docker]                                # настройки докера
+    label_prefix = "healthcheck"        # префикс меток поиска             
+    host = "localhost"                  # хост подключения, игнорируется если указан socket.
+    port = 2375                         # порт подключения, игнорируется если указан socket.
+    ca = ""                             # путь файла до файла CA, игнорируется если указан socket.
+    cert = ""                           # путь до файла сертификата, игнорируется если указан socket.
+    key = ""                            # путь до файла ключа, игнорируется если указан socket.
+    version = "v1.38"                   # версия api docker
+    interval = 10                       # интервал опроса в секундах
+    #tags = ["tag1"]                    # теги выборки (не обязательно)
+    #socket = "/var/run/docker.sock"    # путь к сокету docker (не обязательно)

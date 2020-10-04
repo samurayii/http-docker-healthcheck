@@ -11,3 +11,4 @@ docker-build/app
 docker-build/package.json
 docker-build/package-lock.json
 !docker-build/config.toml
+run.txt

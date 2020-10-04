@@ -18,13 +18,13 @@ program.option("-c, --config <type>", "Path to config file.");
 
 program.parse(process.argv);
 
-if (process.env["TEMPLATE_CONFIG_PATH"] === undefined) {
+if (process.env["HTTP_DOCKER_HEALTHCHECK_CONFIG_PATH"] === undefined) {
 	if (program.config === undefined) {
 		console.error(chalk.red("[ERROR] Not set --config key"));
 		process.exit(1);
 	}
 } else {
-	program.config = process.env["TEMPLATE_CONFIG_PATH"];
+	program.config = process.env["HTTP_DOCKER_HEALTHCHECK_CONFIG_PATH"];
 }
 
 const full_config_path = path.resolve(process.cwd(), program.config);
