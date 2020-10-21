@@ -15,6 +15,8 @@ Http проверка здоровья сервисов для docker.
 
 пример строки запуска: `node /http-docker-healthcheck/app.js -c config.toml`
 
+пример запуска docker контейнера: `docker run -d --restart unless-stopped -v /var/run/docker.sock:/var/run/docker.sock -e HTTP_DOCKER_HEALTHCHECK_WEB_ENABLE=true -p 3001:3001 samuray/http-docker-healthcheck:latest`
+
 ## <a name="launch"></a> Таблица ключей запуска
 Ключ | Описание
 ------------ | -------------
