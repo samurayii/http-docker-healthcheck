@@ -1,6 +1,6 @@
 {
     "name": "http-docker-healthcheck",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Http healthcheck for docker containers",
     "main": "app.js",
     "docker_image": "samuray/http-docker-healthcheck",
