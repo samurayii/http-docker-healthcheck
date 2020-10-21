@@ -188,7 +188,6 @@ export class DockerConnector extends EventEmitter implements IDockerConnector {
                     delete container_info.Status;
 
                     const id = container_info.Id;
-                    const hash = JSON.stringify(container_info);
                     const result_container_info: IDockerConnectorContainerInfo = {
                         id: id,
                         name: container_info.Names[0].replace(/^\//,""),
@@ -275,15 +274,8 @@ export class DockerConnector extends EventEmitter implements IDockerConnector {
                     result_container_info.config.enable = true;
 
                     if (this._container_hash_list[id] === undefined) {
-                        this._container_hash_list[id] = hash;
+                        this._container_hash_list[id] = id;
                         this.emit("add", id, result_container_info);
-                    } else {
-
-                        if (this._container_hash_list[id] !== hash) {
-                            this._container_hash_list[id] = hash;
-                            this.emit("add", id, result_container_info);
-                        }
-
                     }
 
                 }

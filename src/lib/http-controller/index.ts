@@ -45,7 +45,7 @@ export class HttpController implements IHttpController {
                 return;
             }
 
-            this._logger.log(`${chalk.gray("[Http-connector]")} Adding service "${container_info.name}"`, "dev");
+            this._logger.log(`${chalk.gray("[Http-controller]")} Adding service "${container_info.name}"`, "dev");
 
             container_info.config = <IDockerConnectorContainerInfoConfig>json_from_schema(container_info.config, container_config_schema);
 
@@ -53,7 +53,7 @@ export class HttpController implements IHttpController {
             const validate = ajv.compile(container_config_schema);
             
             if (!validate(container_info.config)) {
-                this._logger.error(`${chalk.gray("[Http-connector]")} Config error for service "${container_info.name}"`);
+                this._logger.error(`${chalk.gray("[Http-controller]")} Config error for service "${container_info.name}"`);
                 this._logger.log(`schema errors:\n${JSON.stringify(validate.errors, null, 2)}`);
                 return;
             }
@@ -63,6 +63,7 @@ export class HttpController implements IHttpController {
             if (this._healthcheck_list[id] !== undefined) {
                 this._healthcheck_list[id].healthcheck.stop();
                 this._healthcheck_list[id].healthcheck.removeAllListeners();
+                delete this._healthcheck_list[id];
             }
 
             this._healthcheck_list[id] = {
@@ -74,22 +75,24 @@ export class HttpController implements IHttpController {
                 healthcheck: healthcheck
             };
 
-            this._logger.log(`${chalk.gray("[Http-connector]")} Service "${container_info.name} added"`, "dev");
+            this._logger.log(`${chalk.gray("[Http-controller]")} Service "${container_info.name}" added`, "dev");
 
             this._healthcheck_list[id].healthcheck.run();
 
             this._healthcheck_list[id].healthcheck.on("unhealthy:trigger", () => {
+
                 if (container_info.config.policy === "restart") {
 
-                    this._logger.log(`${chalk.gray("[Http-connector]")} Service "${container_info.name}" restarting ...`, "dev");
+                    this._logger.log(`${chalk.gray("[Http-controller]")} Service "${container_info.name}" restarting ...`, "dev");
 
                     this._docker_connector.restart(id).then( () => {
-                        this._logger.log(`${chalk.gray("[Http-connector]")} Service "${container_info.name}" restarted`, "dev");
+                        this._logger.log(`${chalk.gray("[Http-controller]")} Service "${container_info.name}" restarted`, "dev");
                     }).catch( (error) => {
-                        this._logger.error(`${chalk.gray("[Http-connector]")} Error restarting service "${container_info.name}". ${error.message}`);
+                        this._logger.error(`${chalk.gray("[Http-controller]")} Error restarting service "${container_info.name}". ${error.message}`);
                         this._logger.log(error.stack, "debug");
                     });
                 }
+
             });
 
         });
@@ -98,7 +101,7 @@ export class HttpController implements IHttpController {
             if (this._healthcheck_list[id] !== undefined) {
                 this._healthcheck_list[id].healthcheck.stop();
                 this._healthcheck_list[id].healthcheck.removeAllListeners();
-                this._logger.log(`${chalk.gray("[Http-connector]")} Service "${this._healthcheck_list[id].name}" deleted`, "dev");
+                this._logger.log(`${chalk.gray("[Http-controller]")} Service "${this._healthcheck_list[id].name}" deleted, ID: ${this._healthcheck_list[id].healthcheck.uid}`, "dev");
                 delete this._healthcheck_list[id];
             }
         });
@@ -118,7 +121,7 @@ export class HttpController implements IHttpController {
 
         this._healthcheck_list = {};
 
-        this._logger.log(`${chalk.gray("[Http-connector]")} stopped`, "dev");
+        this._logger.log(`${chalk.gray("[Http-controller]")} stopped`, "dev");
     }
 
     run (): void {
@@ -133,7 +136,7 @@ export class HttpController implements IHttpController {
             this._healthcheck_list[id].healthcheck.run();
         }
 
-        this._logger.log(`${chalk.gray("[Http-connector]")} started`, "dev");
+        this._logger.log(`${chalk.gray("[Http-controller]")} started`, "dev");
     }
 
     getServiceInfo (healthcheck_id: string): IHttpControllerHealthcheckInfo {

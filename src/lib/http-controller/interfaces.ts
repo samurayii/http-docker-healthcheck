@@ -42,6 +42,7 @@ export interface IHttpHealthcheck extends EventEmitter {
     readonly healthy: boolean
     readonly running: boolean
     readonly info: IHttpHealthcheckInfo
+    readonly uid: string
 }
 
 export interface IHttpController {

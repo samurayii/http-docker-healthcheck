@@ -4,6 +4,7 @@ import { IDockerConnectorContainerInfoConfig } from "../../../lib/docker-connect
 import { IHttpHealthcheck, IHttpHealthcheckInfo } from "../interfaces";
 import { EventEmitter } from "events";
 import * as chalk from "chalk";
+import { v4 as uuidv4 } from "uuid";
 
 export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
 
@@ -14,6 +15,7 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
     private _current_healthy_attempt: number
     private _current_unhealthy_attempt: number
     private _current_trigger: number
+    private _uid: string
 
     constructor (
         private readonly _name: string,
@@ -28,6 +30,7 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
         this._current_healthy_attempt = 0;
         this._current_unhealthy_attempt = 0;
         this._current_trigger = 0;
+        this._uid = uuidv4();
 
         let port = 80;
         let host = this._name;
@@ -57,7 +60,7 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
             url: `${this._config.protocol}://${host}:${port}/${this._config.path.replace(/^\//,"")}`
         };
 
-        this._logger.log(`${chalk.gray("[Http-connector]")} Healthcheck "${this._name}" added`, "dev");
+        this._logger.log(`${chalk.gray("[Http-controller]")} Healthcheck "${this._name}" added, ID: ${this._uid}`, "dev");
 
     }
 
@@ -94,6 +97,10 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
         };
     }
 
+    get uid (): string {
+        return this._uid;
+    }
+
     run (): void {
 
         if (this._running_flag === true) {
@@ -102,7 +109,7 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
 
         this._running_flag = true;
 
-        this._logger.log(`${chalk.gray("[Http-connector]")} Healthcheck "${this._name}" started`, "dev");
+        this._logger.log(`${chalk.gray("[Http-controller]")} Healthcheck "${this._name}" started`, "dev");
 
         setTimeout( () => {
 
@@ -142,13 +149,13 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
 
         clearTimeout(this._id_interval);
 
-        this._logger.log(`${chalk.gray("[Http-connector]")} Healthcheck "${this._name}" stopped`, "dev");
+        this._logger.log(`${chalk.gray("[Http-controller]")} Healthcheck "${this._name}" stopped`, "dev");
     }
 
     _check (): Promise<void> {
         return new Promise( (resolve) => {
 
-            this._logger.log(`${chalk.gray("[Http-connector]")} Healthcheck "${this._name}" request to: ${chalk.gray(this._request_config.url)}`, "dev");
+            this._logger.log(`${chalk.gray("[Http-controller]")} Healthcheck "${this._name}" request to: ${chalk.gray(this._request_config.url)}`, "dev");
 
             axios(this._request_config).then( () => {
                 
@@ -161,7 +168,7 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
 
                     if (this._current_healthy_attempt >= this._config.healthy_after) {
                         this._healthy = true;
-                        this._logger.log(`${chalk.gray("[Http-connector]")} Healthcheck named "${this._name}" is ${chalk.green("healthy")}`, "dev");
+                        this._logger.log(`${chalk.gray("[Http-controller]")} Healthcheck named "${this._name}" is ${chalk.green("healthy")}`, "dev");
                         this.emit("healthy");
                     }
 
@@ -172,11 +179,11 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
             }).catch( (error) => {
 
                 if (error.response) {
-                    this._logger.error(`${chalk.gray("[Http-connector]")} Service "${this._name}" return code: ${error.response.status}`);
+                    this._logger.error(`${chalk.gray("[Http-controller]")} Service "${this._name}" return code: ${error.response.status}`);
                 } else if (error.request) {
-                    this._logger.error(`${chalk.gray("[Http-connector]")} Error request to service "${this._name}". Request return: ${error.message}`);
+                    this._logger.error(`${chalk.gray("[Http-controller]")} Error request to service "${this._name}". Request return: ${error.message}`);
                 } else {
-                    this._logger.error(`${chalk.gray("[Http-connector]")} Healthcheck service "${this._name}" error: ${error.message}`);
+                    this._logger.error(`${chalk.gray("[Http-controller]")} Healthcheck service "${this._name}" error: ${error.message}`);
                     this._logger.log(error.stack, "debug");
                 }
                 
@@ -188,7 +195,7 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
 
                     if (this._current_unhealthy_attempt >= this._config.unhealthy_after) {
                         this._healthy = false;
-                        this._logger.log(`${chalk.gray("[Http-connector]")} Healthcheck "${this._name}" is ${chalk.red("unhealthy")}`, "dev");
+                        this._logger.log(`${chalk.gray("[Http-controller]")} Healthcheck "${this._name}" is ${chalk.red("unhealthy")}`, "dev");
                         this.emit("unhealthy");
                     }
 
@@ -198,7 +205,7 @@ export class HttpHealthcheck extends EventEmitter implements IHttpHealthcheck {
 
                 if (this._current_trigger >= this._config.policy_trigger) {
                     this._current_trigger = 0;
-                    this._logger.log(`${chalk.gray("[Http-connector]")} Healthcheck "${this._name}" unhealthy triggered`, "dev");
+                    this._logger.log(`${chalk.gray("[Http-controller]")} Healthcheck "${this._name}" unhealthy triggered`, "dev");
                     this.emit("unhealthy:trigger");
                 }
 
