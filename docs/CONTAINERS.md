@@ -22,7 +22,7 @@
 | healthy_after | число | 3 | удачные попытки |
 | unhealthy_after | число | 3 | неудачные попытки |
 | initialization_timeout | число | 10 | интервал ожидания |
-| policy | строка | restart | политика поведения (node или restart) |
+| policy | строка | restart | политика поведения (none или restart) |
 | policy_trigger | число | 3 | количество неудач для запуска действий политики |
 | tags | строка | | теги фильтрации контейнера |
 | header.${header} | строка | | добавить заголовок опроса ${header} |
