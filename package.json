@@ -70,7 +70,7 @@
     },
     "dependencies": {
         "ajv": "^6.12.5",
-        "axios": "^0.20.0",
+        "axios": "^0.21.1",
         "chalk": "^4.1.0",
         "commander": "^6.1.0",
         "di-ts-decorators": "0.0.3",
