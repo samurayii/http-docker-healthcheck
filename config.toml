@@ -14,7 +14,7 @@
 
 [web]
     enable = true
-    prefix = "/ui"
+    prefix = "/ui/healthcheck"
     [web.static]
         folder = "src/static"
 
