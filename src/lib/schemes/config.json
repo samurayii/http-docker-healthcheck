@@ -172,7 +172,7 @@
                     "minLength": 0,
                     "maxLength": 32,
                     "env": "HTTP_DOCKER_HEALTHCHECK_WEB_PREFIX",
-                    "pattern": "^(\/[a-zA-Z]{1}|)[a-zA-Z0-9\/]{0,31}$"
+                    "pattern": "^(\/[a-zA-Z]{1}|)[-a-zA-Z0-9\/]{0,31}$"
                 },
                 "proxy": {
                     "type": "boolean",
