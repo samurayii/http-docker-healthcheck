@@ -14,6 +14,7 @@
 
 [web]
     enable = true
+    prefix = "/ui"
     [web.static]
         folder = "src/static"
 

@@ -140,11 +140,6 @@ Http проверка здоровья сервисов для docker.
 | web.env | строка | development | среда для сервера [koa](https://www.npmjs.com/package/koa) |
 | web.keys | строка[] |  | массив подписанных ключей cookie |
 | web.static.folder | строка | static | папка со статическими файлами |
-| web.static.maxage | число |  | время жизни кеша в миллисекундах |
 | web.static.hidden | логический | false | разрешение отдавать скрытые файлы |
-| web.static.index | строка | index.html | название файла индекса |
-| web.static.defer | логический | false | позволить активировать нижестоящие промежуточное по первым |
-| web.static.gzip | логический | true | gzip сжатие |
-| web.static.brotli | логический | true | автоматическое обслуживание файла brotli |
 | docke_healthcheck.enable | логический | false | активация |
 | docke_healthcheck.timeout | число | 10 | время ожидания в секундах |

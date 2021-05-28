@@ -36,12 +36,7 @@
     #keys = []                          # массив подписанных ключей cookie
     [web.static]                        # настройка статического сервера (пакет: https://github.com/koajs/static)
         folder = "static"               # папка со статическими файлами
-        maxage = 0                      # время жизни кеша в миллисекундах
         hidden = false                  # разрешение отдавать скрытые файлы
-        index = "index.html"            # название файла индекса
-        defer = false                   # позволить активировать нижестоящие промежуточное по первым
-        gzip = true                     # gzip сжатие
-        brotli = true                   # автоматическое обслуживание файла brotli
 
 [docker_healthcheck]    # настрока провеки здоровя для контейнера (утилита docker-healthcheck)
     enable = false      # активация

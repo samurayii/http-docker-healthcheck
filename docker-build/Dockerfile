@@ -1,12 +1,11 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 #ENV APP_RESTARTER "true"
-ENV APP_RESTARTER_VERSION 0.0.7
-ENV APP_NAME "http-docker-healthcheck"
+ARG APP_RESTARTER_VERSION 0.0.7
 
 RUN apt-get update && \
     apt-get install -y curl bash && \
-    curl -sL https://deb.nodesource.com/setup_12.x | bash && \
+    curl -sL https://deb.nodesource.com/setup_14.x | bash && \
     apt-get install -y nodejs && \
     node -v && \
     apt-get clean && \
@@ -22,23 +21,18 @@ RUN curl -Lo /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases
     chmod 755 /usr/local/bin/dumb-init
 
 COPY start.sh /start
-COPY healthcheck.sh /healthcheck
 
-RUN chmod +x /start && \
-    chmod +x /healthcheck
+RUN chmod +x /start
 
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["/bin/bash", "/start"]
 
-COPY package.json /${APP_NAME}/package.json
-COPY package-lock.json /${APP_NAME}/package-lock.json
-COPY app /${APP_NAME}
-COPY config.toml /${APP_NAME}/config.toml
+COPY package.json /http-docker-healthcheck/package.json
+COPY package-lock.json /http-docker-healthcheck/package-lock.json
+COPY app /http-docker-healthcheck
+COPY config.toml /http-docker-healthcheck/config.toml
 
 
-RUN cd /${APP_NAME} && \
-    npm install --only=production && \
-    node app.js -v && \
-    node docker-healthcheck.js -v
-
-HEALTHCHECK --interval=10s --timeout=10s --start-period=5s --retries=3 CMD [ "bash", "/healthcheck" ]
+RUN cd /http-docker-healthcheck && \
+    npm ci && \
+    node app.js -v

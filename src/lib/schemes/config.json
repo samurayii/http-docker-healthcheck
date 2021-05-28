@@ -227,52 +227,16 @@
                             "minLength": 1,
                             "maxLength": 256
                         },
-                        "maxage": {
-                            "type": "integer",
-                            "default": 0,
-                            "env": "HTTP_DOCKER_HEALTHCHECK_WEB_STATIC_MAXAGE",
-                            "minimum": 0
-                        },
                         "hidden": {
                             "type": "boolean",
                             "default": false,
-                            "env": "HTTP_DOCKER_HEALTHCHECK_WEB_STATIC_HIDDEN",
-                            "enum": [true, false]
-                        },
-                        "index": {
-                            "type": "string",
-                            "default": "index.html",
-                            "env": "HTTP_DOCKER_HEALTHCHECK_WEB_STATIC_INDEX",
-                            "minLength": 1,
-                            "maxLength": 64
-                        },
-                        "defer": {
-                            "type": "boolean",
-                            "default": false,
-                            "env": "HTTP_DOCKER_HEALTHCHECK_WEB_STATIC_DEFER",
-                            "enum": [true, false]
-                        },
-                        "gzip": {
-                            "type": "boolean",
-                            "default": false,
-                            "env": "HTTP_DOCKER_HEALTHCHECK_WEB_STATIC_GZIP",
-                            "enum": [true, false]
-                        },
-                        "brotli": {
-                            "type": "boolean",
-                            "default": false,
-                            "env": "HTTP_DOCKER_HEALTHCHECK_WEB_STATIC_BROTLI",
+                            "env": "HTTP_DOCKER_HEALTHCHECK_STATIC_HIDDEN",
                             "enum": [true, false]
                         }
                     },
                     "required": [
                         "folder",
-                        "maxage",
-                        "hidden",
-                        "index",
-                        "defer",
-                        "gzip",
-                        "brotli"
+                        "hidden"
                     ]
                 }
             },

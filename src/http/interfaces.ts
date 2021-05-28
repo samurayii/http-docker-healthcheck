@@ -20,12 +20,6 @@ export interface IWebServerConfig {
     ips_count: number
     static: {
         folder: string
-        maxage: number
         hidden: boolean
-        index: string
-        defer: boolean
-        gzip: boolean
-        brotli: boolean
-        extensions: boolean
     }
 }

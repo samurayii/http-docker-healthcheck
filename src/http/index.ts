@@ -4,9 +4,8 @@ export * from "./middleware/security";
 export * from "./middleware/logger";
 export * from "./middleware/authorization";
 
-export * from "./routers/service";
 export * from "./routers/ui";
-
-export * from "./middleware/static";
+export * from "./routers/service";
+export * from "./routers/static";
 
 export * from "./interfaces";

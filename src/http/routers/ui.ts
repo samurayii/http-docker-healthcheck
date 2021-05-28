@@ -10,7 +10,10 @@ import Handlebars from "handlebars";
 export class RouteUI {
 
     private readonly _full_templates_path: string
-    private readonly _index_template: HandlebarsTemplateDelegate<IHttpControllerHealthcheckInfo[]>
+    private readonly _index_template: HandlebarsTemplateDelegate<{
+        prefix: string
+        data: IHttpControllerHealthcheckInfo[]
+    }>
 
     constructor (
         private readonly _app_id: string,
@@ -30,7 +33,11 @@ export class RouteUI {
 
         const result = this._http_healthcheck.getInfo();
 
-        ctx.body = this._index_template(result);
+        ctx.body = this._index_template({
+            prefix: `${ctx.koad.config.prefix.replace(/\/$/gi, "")}`,
+            data: result
+        });
+        
         ctx.set("Content-Type", "text/html");
         ctx.status = 200;
     
